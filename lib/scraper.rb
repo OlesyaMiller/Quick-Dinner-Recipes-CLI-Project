@@ -3,9 +3,9 @@ require 'pry'
 
 class Scraper
 
-    def api_request
-        data = HTTParty.get("https://api.spoonacular.com/recipes/complexSearch?query=pasta&maxFat=25&number=2&apiKey=4e36a8e7ee7b4d6f9366efaf9374250a")
-    end
+    # def api_request
+    #     data = HTTParty.get("https://api.spoonacular.com/recipes/complexSearch?query=pasta&maxFat=25&number=2&apiKey=4e36a8e7ee7b4d6f9366efaf9374250a")
+    # end
 
     def self.scrape_page
         doc = Nokogiri::HTML(open("https://www.simplyrecipes.com/recipes/type/quick/dinner/"))

@@ -1,9 +1,3 @@
-require_relative "../lib/scraper.rb"
-require_relative "../lib/recipe.rb"
-require 'nokogiri'
-require 'pry'
-require 'httparty'
-
 class CommandLineInterface
 
     def run
@@ -18,52 +12,67 @@ class CommandLineInterface
     end
 
     def greeting
-        puts "Welcome to Quick Dinner Recipes app!"
+        puts ""
+        puts "WELCOME TO QUICK DINNER RECIPES APP!"
+        puts ""
         puts "To exit the app at any time, type 'exit'"
         puts "To start over at any time, type 'start over'"
         puts "To see the list of recipes, enter 'recipes'"
-        puts "To seach by food type, enter 'search by food type'"
-        puts "To search by prep time, enter 'search by prep time'"
+        puts "To seach recipes by food type, enter 'search by food type'"
+        puts "To search recipes by prep time, enter 'search by prep time'"
         puts ""
     end
 
     def display_recipes
         Recipe.all.each.with_index(1) {|recipe, index| puts "#{index}. #{recipe.title}"}
+        puts ""
     end
 
     def interaction_with_user
         input = nil 
         while input != "exit"
             input = gets.chomp 
-            if input == "recipes"
+            if input.downcase == "recipes"
                 puts ""
-                puts "To see recipe info, type in recipe number"
+                puts "To see recipe info, type recipe number"
                 puts ""
                 display_recipes
                 find_recipe_by_number
-            elsif input == "search by food type"
+            elsif input.downcase == "search by food type"
                 list_recipes_by_food_type
-            elsif input == "search by prep time"
+            elsif input.downcase == "search by prep time"
                 list_recipes_by_prep_time
-            elsif input == "exit"
-                exit
-            elsif input == "start over"
-                run 
+            elsif input.downcase == "exit"
+                exit_app 
             else
-                puts "Enter correct input"
+                enter_correct_input
             end
         end
     end
 
-    def go_back_to_recipes_list
+    def start_over
+        puts ""
+        greeting
+        interaction_with_user
+        puts ""
+    end
 
+    def exit_app 
+        puts "Goodbye!"
+        sleep(1)
+        exit
+    end
+
+    def enter_correct_input
+        puts ""
+        puts "Enter correct input"
+        puts ""
     end
 
     def find_recipe_by_number
         input = nil 
         while input != "exit"
             input = gets.chomp 
-
             if (1..Recipe.all.length).include?(input.to_i)
                 selected_recipe = Recipe.all[input.to_i - 1]
                 puts "#{selected_recipe.info}"
@@ -73,49 +82,57 @@ class CommandLineInterface
                 if selected_recipe.food_type != nil 
                     puts "Food type: #{selected_recipe.food_type}"
                 end
-            elsif input == "exit"
-                puts "Goodbye!"
-                exit 
-            elsif input == "start over"
-                run 
+                puts ""
+            elsif input.downcase == "exit"
+                exit_app 
+            elsif input.downcase == "start over"
+                start_over
             else
-                puts "Enter a valid number"
+                enter_correct_input
             end
         end
     end
 
     def list_recipes_by_food_type
+        puts ""
         puts "Please enter the name of a food type from the following: gluten-free, healthy, low carb, vegetarian, paleo"
-        puts "To start over, type 'start over', to exit, type 'exit'"
+        puts ""
         input = nil 
         while input != "exit"
             input = gets.chomp 
-            Recipe.all.each do |recipe|
-                if recipe.food_type != nil && recipe.food_type.downcase.include?(input)
-                    puts "#{recipe.title}"
-                    puts "Author: #{recipe.author}"
-                    puts "Prep time: #{recipe.prep_time}"
-                    puts "Food type: #{recipe.food_type}"
-                    puts ""
-                    puts "#{recipe.info}"
-                    puts ""
+            if input.downcase == "healthy" || input.downcase == "gluten-free" || input.downcase == "low carb" || input.downcase == "paleo" || input.downcase == "vegetarian"
+                Recipe.all.each do |recipe|
+                    if recipe.food_type != nil && recipe.food_type.downcase.include?(input.downcase)
+                        puts "#{recipe.title}"
+                        puts "Author: #{recipe.author}"
+                        puts "Prep time: #{recipe.prep_time}"
+                        puts "Food type: #{recipe.food_type}"
+                        puts ""
+                        puts "#{recipe.info}"
+                        puts ""
+                    end
                 end
-            end
-            if input == "exit"
-                exit 
+            elsif input.downcase == "exit"
+                exit_app
+            elsif input.downcase == "start over"
+                start_over
+            else
+                enter_correct_input
             end
         end
     end
 
     def list_recipes_by_prep_time
-        puts "All the recipes take under 45 minutes to cook. How much time do you have?(enter a number equal to or smaller than 45)"
-        
+        prep_times = Recipe.all.map { |recipe| recipe.prep_time.split(" ")[0].to_i }
+        puts "All the recipes take under #{prep_times.max} minutes to cook. The quickest recipes is #{prep_times.min} minutes. How much time do you have?"
+        puts ""
         input = nil 
         while input != "exit"
             input = gets.chomp 
-            if input.to_i.integer?
+            if input.to_i >= prep_times.min  
                 Recipe.all.each do |recipe|
                     if recipe.prep_time.split(" ")[0].to_i <= input.to_i  
+                        puts ""
                         puts "#{recipe.title}"
                         puts "Author: #{recipe.author}"
                         puts "Prep time: #{recipe.prep_time}"
@@ -127,12 +144,13 @@ class CommandLineInterface
                         puts ""
                     end
                 end
-            elsif input == "exit"
-                exit 
+            elsif input.downcase == "start over"
+                start_over
+            elsif input.downcase == "exit"
+                exit_app
             else
-                puts "Enter correct input"
+                enter_correct_input
             end
         end
     end
-
 end
