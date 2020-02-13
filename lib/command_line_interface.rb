@@ -176,7 +176,7 @@ class CommandLineInterface
         puts ""
         input = gets.chomp 
 
-        if (1..@selected_recipes_by_prep_time.length).include?(input.to_i)
+        if (1..@selected_recipes_by_prep_time.length).include?(input.to_i) && !input.include?("min")
             recipe = @selected_recipes_by_prep_time[input.to_i - 1]
             recipe_information(recipe)
             last_level_method_for_prep_time
