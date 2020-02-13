@@ -19,19 +19,6 @@ class Recipe
         end
     end
 
-    # def initialize
-    #     @@all << self
-    # end
-
-    # def self.add_attributes_from_array(recipes_array)
-    #     recipes_array.each do |recipe|
-    #         recipe.each do |key, value| 
-    #             self.send "#{key}=", value 
-    #         end
-    #     end
-    #     self
-    # end
-
     def self.all 
         @@all 
     end
