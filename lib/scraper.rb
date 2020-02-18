@@ -6,8 +6,7 @@ class Scraper
     def self.scrape_page
         doc = Nokogiri::HTML(open("https://www.simplyrecipes.com/recipes/type/quick/dinner/"))
         details = doc.css("div.grd-tile-detail")
-        recipes = []
-        details.each do |detail|
+        details.map do |detail|
             recipe_hash = {
                 :title => detail.css("h2.grd-title-link a span").text,
                 :author => detail.css("a.grd-author-link div.author-name").text,
@@ -17,8 +16,8 @@ class Scraper
             if detail.css("div.grd-recipe-summary div.sum-recipe-summary div.sum-properties div.sum-property span.sum-food-type").text != ""
                 recipe_hash[:food_type] = detail.css("div.grd-recipe-summary div.sum-recipe-summary div.sum-properties div.sum-property span.sum-food-type").text
             end
-            recipes << recipe_hash
+            recipe_hash
         end
-        recipes 
+     
     end
 end
