@@ -154,7 +154,7 @@ class CommandLineInterface
         puts "All the recipes take under #{@prep_times.max} minutes to cook. The quickest recipe is #{@prep_times.min} minutes. How much time do you have? (please enter a number followed by 'min' with a space in between, like this: 10 min)"
         puts ""
         input = gets.chomp 
-        if input.split(" ")[0].to_i >= @prep_times.min && input.include?("min")
+        if input.split(" ")[0].to_i >= @prep_times.min && input.include?(" min")
             list_recipes_by_prep_time_helper_method(input)
             recipe_by_prep_time_info
         elsif input.downcase == "start over"
@@ -183,7 +183,7 @@ class CommandLineInterface
             exit_app
         elsif input.downcase == "start over"
             start_over
-        elsif input.split(" ")[0].to_i >= @prep_times.min && input.include?("min")
+        elsif input.split(" ")[0].to_i >= @prep_times.min && input.include?(" min") 
             list_recipes_by_prep_time_helper_method(input)
         else
             enter_correct_input

@@ -1,5 +1,3 @@
-require 'pry'
-
 class Recipe
 
     attr_accessor :title, :author, :prep_time, :info, :food_type 
