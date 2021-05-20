@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
 gem 'pry'
-gem 'nokogiri', '1.10.7'
+gem 'nokogiri', '1.11.4'
 gem 'rake'
 gem 'require_all'
